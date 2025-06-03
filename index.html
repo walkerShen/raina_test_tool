@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据生成工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>测试工程师常用工具</h1>
+                    <p>一站式数据生成和处理工具集</p>
+                </div>
+                <div class="header-actions">
+                    <button class="manual-btn" onclick="openManual()">📖 使用手册</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="tool-nav">
+            <button class="nav-btn active" data-tool="datagen">数据生成工具</button>
+            <button class="nav-btn" data-tool="wordcount">字数统计</button>
+            <button class="nav-btn" data-tool="textcompare">文本对比</button>
+            <button class="nav-btn" data-tool="regex">正则测试</button>
+            <button class="nav-btn" data-tool="jsoncompare">JSON数据对比</button>
+            <button class="nav-btn" data-tool="timetools">时间处理工具</button>
+        </nav>
+
+        </nav>
+
+        <main class="tool-content">
+            <!-- 数据生成工具 -->
+            <div class="tool-panel active" id="datagen-panel">
+                <h2>数据生成工具</h2>
+                
+                <!-- 二级导航 -->
+                <div class="sub-nav">
+                    <button class="sub-nav-btn active" data-generator="randomtext">随机内容生成器</button>
+                    <button class="sub-nav-btn" data-generator="email">随机邮箱生成器</button>
+                    <button class="sub-nav-btn" data-generator="phone">随机电话号码生成器</button>
+                    <button class="sub-nav-btn" data-generator="address">随机地址生成器</button>
+                    <button class="sub-nav-btn" data-generator="idcard">随机身份证生成器</button>
+                </div>
+                
+                <!-- 随机内容生成器 -->
+                <div class="generator-content active" id="randomtext-generator">
+                    <div class="form-group">
+                        <label>生成字数：</label>
+                        <input type="number" id="text-length" value="100" min="10" max="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>语言选择：</label>
+                        <select id="text-language">
+                            <option value="chinese">中文</option>
+                            <option value="english">英文</option>
+                            <option value="japanese">日文</option>
+                            <option value="korean">韩文</option>
+                            <option value="french">法文</option>
+                            <option value="german">德文</option>
+                            <option value="spanish">西班牙文</option>
+                            <option value="russian">俄文</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>内容类型：</label>
+                        <select id="text-type">
+                            <option value="lorem">Lorem ipsum</option>
+                            <option value="article">文章段落</option>
+                            <option value="story">故事内容</option>
+                            <option value="technical">技术文档</option>
+                            <option value="business">商务文本</option>
+                            <option value="casual">日常对话</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generateRandomText()">生成内容</button>
+                    <div class="result-area">
+                        <textarea id="randomtext-result" placeholder="生成的随机内容将显示在这里..."></textarea>
+                        <button class="copy-btn" onclick="copyResult('randomtext-result')">复制结果</button>
+                    </div>
+                </div>
+                
+                <!-- 随机邮箱生成器 -->
+                <div class="generator-content" id="email-generator">
+                    <div class="form-group">
+                        <label>邮箱数量：</label>
+                        <input type="number" id="email-count" value="5" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>域名选择：</label>
+                        <select id="email-domain">
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="163.com">163.com</option>
+                            <option value="qq.com">qq.com</option>
+                            <option value="hotmail.com">hotmail.com</option>
+                            <option value="yahoo.com">yahoo.com</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generateEmails()">生成邮箱</button>
+                    <div class="result-area">
+                        <textarea id="email-result" placeholder="生成的邮箱将显示在这里..."></textarea>
+                        <button class="copy-btn" onclick="copyResult('email-result')">复制结果</button>
+                    </div>
+                </div>
+
+                <!-- 电话号码生成器 -->
+                <div class="generator-content" id="phone-generator">
+                    <div class="form-group">
+                        <label>号码数量：</label>
+                        <input type="number" id="phone-count" value="5" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>号码类型：</label>
+                        <select id="phone-type">
+                            <option value="mobile">手机号码</option>
+                            <option value="landline">固定电话</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generatePhones()">生成号码</button>
+                    <div class="result-area">
+                        <textarea id="phone-result" placeholder="生成的电话号码将显示在这里..."></textarea>
+                        <button class="copy-btn" onclick="copyResult('phone-result')">复制结果</button>
+                    </div>
+                </div>
+
+                <!-- 随机地址生成器 -->
+                <div class="generator-content" id="address-generator">
+                    <div class="form-group">
+                        <label>地址数量：</label>
+                        <input type="number" id="address-count" value="5" min="1" max="50">
+                    </div>
+                    <div class="form-group">
+                        <label>地址类型：</label>
+                        <select id="address-type">
+                            <option value="full">完整地址</option>
+                            <option value="city">仅城市</option>
+                            <option value="street">仅街道</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generateAddresses()">生成地址</button>
+                    <div class="result-area">
+                        <textarea id="address-result" placeholder="生成的地址将显示在这里..."></textarea>
+                        <button class="copy-btn" onclick="copyResult('address-result')">复制结果</button>
+                    </div>
+                </div>
+
+                <!-- 随机身份证生成器 -->
+                <div class="generator-content" id="idcard-generator">
+                    <div class="form-group">
+                        <label>身份证数量：</label>
+                        <input type="number" id="idcard-count" value="5" min="1" max="50">
+                    </div>
+                    <div class="form-group">
+                        <label>性别选择：</label>
+                        <select id="idcard-gender">
+                            <option value="random">随机</option>
+                            <option value="male">男性</option>
+                            <option value="female">女性</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>年龄范围：</label>
+                        <div class="age-range">
+                            <input type="number" id="min-age" value="18" min="1" max="100" placeholder="最小年龄">
+                            <span>-</span>
+                            <input type="number" id="max-age" value="60" min="1" max="100" placeholder="最大年龄">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>地区选择：</label>
+                        <select id="idcard-region">
+                            <option value="random">随机地区</option>
+                            <option value="110000">北京市</option>
+                            <option value="120000">天津市</option>
+                            <option value="130000">河北省</option>
+                            <option value="140000">山西省</option>
+                            <option value="150000">内蒙古自治区</option>
+                            <option value="210000">辽宁省</option>
+                            <option value="220000">吉林省</option>
+                            <option value="230000">黑龙江省</option>
+                            <option value="310000">上海市</option>
+                            <option value="320000">江苏省</option>
+                            <option value="330000">浙江省</option>
+                            <option value="340000">安徽省</option>
+                            <option value="350000">福建省</option>
+                            <option value="360000">江西省</option>
+                            <option value="370000">山东省</option>
+                            <option value="410000">河南省</option>
+                            <option value="420000">湖北省</option>
+                            <option value="430000">湖南省</option>
+                            <option value="440000">广东省</option>
+                            <option value="450000">广西壮族自治区</option>
+                            <option value="460000">海南省</option>
+                            <option value="500000">重庆市</option>
+                            <option value="510000">四川省</option>
+                            <option value="520000">贵州省</option>
+                            <option value="530000">云南省</option>
+                            <option value="540000">西藏自治区</option>
+                            <option value="610000">陕西省</option>
+                            <option value="620000">甘肃省</option>
+                            <option value="630000">青海省</option>
+                            <option value="640000">宁夏回族自治区</option>
+                            <option value="650000">新疆维吾尔自治区</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generateIdCards()">生成身份证</button>
+                    <div class="result-area">
+                        <textarea id="idcard-result" placeholder="生成的身份证号码将显示在这里..."></textarea>
+                        <button class="copy-btn" onclick="copyResult('idcard-result')">复制结果</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- 字数统计工具 -->
+            <div class="tool-panel" id="wordcount-panel">
+                <h2>字数统计工具</h2>
+                <div class="form-group">
+                    <label>输入文本：</label>
+                    <textarea id="text-input" placeholder="请输入要统计的文本..." oninput="countWords()"></textarea>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">字符数（含空格）：</span>
+                        <span class="stat-value" id="char-count-with-space">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">字符数（不含空格）：</span>
+                        <span class="stat-value" id="char-count-no-space">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">单词数：</span>
+                        <span class="stat-value" id="word-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">行数：</span>
+                        <span class="stat-value" id="line-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">段落数：</span>
+                        <span class="stat-value" id="paragraph-count">0</span>
+                    </div>
+                </div>
+                <button class="clear-btn" onclick="clearText()">清空文本</button>
+            </div>
+
+            <!-- 文本对比工具 -->
+            <div class="tool-panel" id="textcompare-panel">
+                <h2>文本内容对比工具</h2>
+                <div class="compare-options">
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="ignore-case" onchange="compareTexts()"> 忽略大小写
+                        </label>
+                    </div>
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="ignore-whitespace" onchange="compareTexts()"> 忽略空白字符
+                        </label>
+                    </div>
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="ignore-empty-lines" onchange="compareTexts()"> 忽略空行
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="compare-container">
+                    <div class="compare-section">
+                        <h3>文本A</h3>
+                        <textarea id="text-a" placeholder="请输入第一个文本..." oninput="compareTexts()"></textarea>
+                        <div class="text-info">
+                            <span>行数: <span id="lines-a">0</span></span>
+                            <span>字符数: <span id="chars-a">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="compare-section">
+                        <h3>文本B</h3>
+                        <textarea id="text-b" placeholder="请输入第二个文本..." oninput="compareTexts()"></textarea>
+                        <div class="text-info">
+                            <span>行数: <span id="lines-b">0</span></span>
+                            <span>字符数: <span id="chars-b">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="compare-actions">
+                    <button class="generate-btn" onclick="compareTexts()">重新对比</button>
+                    <button class="clear-btn" onclick="clearCompareTexts()">清空所有</button>
+                    <button class="copy-btn" onclick="copyCompareResult()">复制差异报告</button>
+                </div>
+                
+                <div class="compare-result">
+                    <h3>对比结果</h3>
+                    <div class="result-summary" id="compare-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">相同行数：</span>
+                            <span class="summary-value" id="same-lines">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">不同行数：</span>
+                            <span class="summary-value" id="diff-lines">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">相似度：</span>
+                            <span class="summary-value" id="similarity">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="diff-display" id="diff-result">
+                        <p class="diff-hint">输入两个文本进行对比，差异将在这里显示</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 正则表达式测试工具 -->
+            <div class="tool-panel" id="regex-panel">
+                <h2>正则表达式测试工具</h2>
+                
+                <div class="regex-container">
+                    <div class="regex-input-section">
+                        <div class="form-group">
+                            <label for="regex-pattern">正则表达式：</label>
+                            <div class="regex-input-wrapper">
+                                <span class="regex-delimiter">/</span>
+                                <input type="text" id="regex-pattern" placeholder="输入正则表达式" oninput="testRegex()">
+                                <span class="regex-delimiter">/</span>
+                                <input type="text" id="regex-flags" placeholder="选择标志" maxlength="6" oninput="testRegex()">
+                            </div>
+                            <div class="regex-flags-help">
+                                <span>常用标志：<span class="help-icon" title="点击右边按钮选择正则表达式标志，把鼠标悬停在对应标志上时可查看详细说明">❓</span></span>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('g')" title="g - 全局匹配：查找所有匹配项，而不是只找第一个">g</button>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('i')" title="i - 忽略大小写：匹配时不区分大小写字母">i</button>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('m')" title="m - 多行模式：^ 和 $ 匹配每行的开始和结束">m</button>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('s')" title="s - 点号匹配所有：. 可以匹配包括换行符在内的任何字符">s</button>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('u')" title="u - Unicode模式：正确处理Unicode字符和emoji">u</button>
+                                <button type="button" class="flag-btn" onclick="toggleFlag('y')" title="y - 粘性匹配：从lastIndex位置开始匹配，用于连续解析">y</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="test-text">测试文本：</label>
+                            <textarea id="test-text" rows="8" placeholder="输入要测试的文本" oninput="testRegex()"></textarea>
+                        </div>
+                        
+                        <div class="regex-actions">
+                            <button onclick="testRegex()" class="btn-primary">测试</button>
+                            <button onclick="clearRegexTest()" class="btn-secondary">清空</button>
+                            <button onclick="copyRegexResult()" class="btn-copy">复制结果</button>
+                        </div>
+                    </div>
+                    
+                    <div class="regex-result-section">
+                        <div class="regex-info">
+                            <div class="info-item">
+                                <span class="info-label">匹配数量：</span>
+                                <span id="match-count">0</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">正则状态：</span>
+                                <span id="regex-status" class="status-valid">有效</span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-tabs">
+                            <button class="tab-btn active" onclick="showTab('matches')">匹配结果</button>
+                            <button class="tab-btn" onclick="showTab('groups')">分组详情</button>
+                            <button class="tab-btn" onclick="showTab('replace')">替换测试</button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <div id="matches-tab" class="tab-panel active">
+                                <div class="matches-display">
+                                    <div id="highlighted-text" class="highlighted-text">
+                                        <p class="placeholder-text">输入正则表达式和测试文本，匹配结果将在这里高亮显示</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="matches-list">
+                                    <h4>匹配列表：</h4>
+                                    <div id="matches-list" class="matches-container">
+                                        <p class="placeholder-text">暂无匹配结果</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="groups-tab" class="tab-panel">
+                                <h4>分组捕获：</h4>
+                                <div id="groups-list" class="groups-container">
+                                    <p class="placeholder-text">暂无分组信息</p>
+                                </div>
+                            </div>
+                            
+                            <div id="replace-tab" class="tab-panel">
+                                <div class="form-group">
+                                    <label for="replace-text">替换文本：</label>
+                                    <input type="text" id="replace-text" placeholder="输入替换文本 (支持 $1, $2 等分组引用)" oninput="testReplace()">
+                                </div>
+                                <div class="replace-result">
+                                    <h4>替换结果：</h4>
+                                    <div id="replace-result" class="replace-output">
+                                        <p class="placeholder-text">输入替换文本查看结果</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JSON数据对比工具 -->
+            <div class="tool-panel" id="jsoncompare-panel">
+                <h2>JSON数据对比工具</h2>
+                
+                <div class="json-compare-container">
+                    <div class="json-input-section">
+                        <div class="json-inputs">
+                            <div class="json-input-group">
+                                <label for="json-left">JSON数据 A：</label>
+                                <textarea id="json-left" rows="15" placeholder="请输入第一个JSON数据" oninput="compareJSON()"></textarea>
+                                <div class="json-actions">
+                                    <button onclick="formatJSON('left')" class="btn-secondary">格式化</button>
+                                    <button onclick="clearJSON('left')" class="btn-secondary">清空</button>
+                                </div>
+                            </div>
+                            
+                            <div class="json-input-group">
+                                <label for="json-right">JSON数据 B：</label>
+                                <textarea id="json-right" rows="15" placeholder="请输入第二个JSON数据" oninput="compareJSON()"></textarea>
+                                <div class="json-actions">
+                                    <button onclick="formatJSON('right')" class="btn-secondary">格式化</button>
+                                    <button onclick="clearJSON('right')" class="btn-secondary">清空</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="compare-actions">
+                            <button onclick="compareJSON()" class="btn-primary">对比JSON</button>
+                            <button onclick="clearAllJSON()" class="btn-secondary">清空全部</button>
+                            <button onclick="copyCompareResult()" class="btn-copy">复制结果</button>
+                        </div>
+                    </div>
+                    
+                    <div class="json-result-section">
+                        <div class="json-status">
+                            <div class="status-item">
+                                <span class="status-label">JSON A 状态：</span>
+                                <span id="json-left-status" class="status-pending">待验证</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">JSON B 状态：</span>
+                                <span id="json-right-status" class="status-pending">待验证</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">对比结果：</span>
+                                <span id="compare-status" class="status-pending">待对比</span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-tabs">
+                            <button class="tab-btn active" onclick="showJSONTab('differences')">差异详情</button>
+                            <button class="tab-btn" onclick="showJSONTab('structure')">结构对比</button>
+                            <button class="tab-btn" onclick="showJSONTab('summary')">对比摘要</button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <div id="differences-tab" class="tab-panel active">
+                                <div class="differences-display">
+                                    <h4>差异列表：</h4>
+                                    <div id="differences-list" class="differences-container">
+                                        <p class="placeholder-text">输入两个JSON数据进行对比，差异将在这里显示</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="structure-tab" class="tab-panel">
+                                <div class="structure-display">
+                                    <h4>结构对比：</h4>
+                                    <div id="structure-compare" class="structure-container">
+                                        <p class="placeholder-text">JSON结构对比信息将在这里显示</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="summary-tab" class="tab-panel">
+                                <div class="summary-display">
+                                    <h4>对比摘要：</h4>
+                                    <div id="summary-info" class="summary-container">
+                                        <div class="summary-stats">
+                                            <div class="stat-item">
+                                                <span class="stat-label">相同字段：</span>
+                                                <span id="same-fields">0</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <span class="stat-label">不同字段：</span>
+                                                <span id="diff-fields">0</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <span class="stat-label">新增字段：</span>
+                                                <span id="added-fields">0</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <span class="stat-label">删除字段：</span>
+                                                <span id="removed-fields">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 时间处理工具 -->
+            <div class="tool-panel" id="timetools-panel">
+                <h2>时间处理工具</h2>
+                
+                <!-- 二级导航 -->
+                <div class="sub-nav">
+                    <button class="sub-nav-btn active" data-generator="timestamp">时间戳转换</button>
+                    <button class="sub-nav-btn" data-generator="timeconvert">时间换算工具</button>
+                    <button class="sub-nav-btn" data-generator="datecalc">日期计算器</button>
+                </div>
+                
+                <!-- 时间戳转换 -->
+                <div class="generator-content active" id="timestamp-generator">
+                    <div class="converter-section">
+                        <h3>时间戳转日期</h3>
+                        <div class="form-group">
+                            <label>时间戳：</label>
+                            <input type="text" id="timestamp-input" placeholder="输入时间戳（秒或毫秒）">
+                        </div>
+                        <button class="convert-btn" onclick="timestampToDate()">转换为日期</button>
+                        <div class="result-display" id="timestamp-to-date-result"></div>
+                    </div>
+                    
+                    <div class="converter-section">
+                        <h3>日期转时间戳</h3>
+                        <div class="form-group">
+                            <label>日期时间：</label>
+                            <input type="datetime-local" id="date-input">
+                        </div>
+                        <button class="convert-btn" onclick="dateToTimestamp()">转换为时间戳</button>
+                        <div class="result-display" id="date-to-timestamp-result"></div>
+                    </div>
+                    
+                    <div class="converter-section">
+                        <h3>当前时间戳</h3>
+                        <button class="convert-btn" onclick="getCurrentTimestamp()">获取当前时间戳</button>
+                        <div class="result-display" id="current-timestamp-result"></div>
+                    </div>
+                </div>
+                
+                <!-- 时间换算工具 -->
+                <div class="generator-content" id="timeconvert-generator">
+                    <div class="form-group">
+                        <label>时间单位换算：</label>
+                        <div class="time-convert-section">
+                            <div class="convert-row">
+                                <input type="number" id="input-value" placeholder="输入数值" step="any">
+                                <select id="from-unit">
+                                    <option value="seconds">秒</option>
+                                    <option value="minutes">分钟</option>
+                                    <option value="hours">小时</option>
+                                    <option value="days">天</option>
+                                    <option value="weeks">周</option>
+                                    <option value="months">月</option>
+                                    <option value="years">年</option>
+                                    <option value="milliseconds">毫秒</option>
+                                </select>
+                                <span class="convert-arrow">→</span>
+                                <select id="to-unit">
+                                    <option value="seconds">秒</option>
+                                    <option value="minutes" selected>分钟</option>
+                                    <option value="hours">小时</option>
+                                    <option value="days">天</option>
+                                    <option value="weeks">周</option>
+                                    <option value="months">月</option>
+                                    <option value="years">年</option>
+                                    <option value="milliseconds">毫秒</option>
+                                </select>
+                            </div>
+                            <button class="generate-btn" onclick="convertTime()">转换</button>
+                            <div class="result-display" id="convert-result"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>常用时间换算表：</label>
+                        <div class="time-table">
+                            <div class="table-row">
+                                <span>1分钟 = 60秒</span>
+                                <span>1小时 = 60分钟 = 3,600秒</span>
+                            </div>
+                            <div class="table-row">
+                                <span>1天 = 24小时 = 1,440分钟</span>
+                                <span>1周 = 7天 = 168小时</span>
+                            </div>
+                            <div class="table-row">
+                                <span>1月 ≈ 30天 = 720小时</span>
+                                <span>1年 = 365天 = 8,760小时</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 日期计算器 -->
+                <div class="generator-content" id="datecalc-generator">
+                    <div class="form-group">
+                        <label>日期加减计算：</label>
+                        <div class="date-calc-section">
+                            <div class="calc-row">
+                                <label>起始日期：</label>
+                                <input type="date" id="start-date">
+                            </div>
+                            <div class="calc-row">
+                                <label>操作：</label>
+                                <select id="operation">
+                                    <option value="add">加上</option>
+                                    <option value="subtract">减去</option>
+                                </select>
+                                <input type="number" id="calc-value" placeholder="数值" min="0">
+                                <select id="calc-unit">
+                                    <option value="days">天</option>
+                                    <option value="weeks">周</option>
+                                    <option value="months">月</option>
+                                    <option value="years">年</option>
+                                </select>
+                            </div>
+                            <button class="generate-btn" onclick="calculateDate()">计算</button>
+                            <div class="result-display" id="calc-result"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>日期间隔计算：</label>
+                        <div class="date-diff-section">
+                            <div class="diff-row">
+                                <label>开始日期：</label>
+                                <input type="date" id="diff-start-date">
+                            </div>
+                            <div class="diff-row">
+                                <label>结束日期：</label>
+                                <input type="date" id="diff-end-date">
+                            </div>
+                            <button class="generate-btn" onclick="calculateDateDiff();">计算间隔</button>
+                            <div class="result-display" id="date-diff-result"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>特殊日期计算：</label>
+                        <div class="special-dates">
+                            <button class="calc-btn" onclick="getWorkdays()">计算工作日</button>
+                            <button class="calc-btn" onclick="getWeekends()">计算周末天数</button>
+                            <button class="calc-btn" onclick="getAge()">计算年龄</button>
+                        </div>
+                        <div class="result-display" id="special-result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cron表达式生成器 -->
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
